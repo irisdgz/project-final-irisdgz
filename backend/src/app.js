@@ -24,7 +24,7 @@ app.get("/", (req, res) => {
 
 app.use(routes);
 
-// Error handler LAST
+// Error handler 
 app.use(errorHandler);
 
 export default app;
