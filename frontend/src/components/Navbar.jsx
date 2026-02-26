@@ -1,7 +1,7 @@
 import { Link, NavLink } from "react-router-dom";
 import styled from "styled-components";
 
-export default function Navbar({ isLoggedIn, onLogout }) {
+export default function Navbar({ isLoggedIn = false, onLogout = () => {} }) {
   return (
     <Header>
       <Brand to="/">MiniStops</Brand>
@@ -11,7 +11,9 @@ export default function Navbar({ isLoggedIn, onLogout }) {
         <NavItem to="/add-place">Add place</NavItem>
 
         {isLoggedIn ? (
-          <LogoutButton onClick={onLogout}>Log out</LogoutButton>
+          <LogoutButton type="button" onClick={onLogout}>
+            Log out
+          </LogoutButton>
         ) : (
           <NavItem to="/login">Log in</NavItem>
         )}
@@ -19,8 +21,6 @@ export default function Navbar({ isLoggedIn, onLogout }) {
     </Header>
   );
 }
-
-/* styled components  */
 
 const Header = styled.header`
   display: flex;
@@ -57,8 +57,4 @@ const LogoutButton = styled.button`
   background: white;
   border-radius: 8px;
   cursor: pointer;
-
-  &:hover {
-    background: #f6f6f6;
-  }
 `;
