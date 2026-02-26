@@ -1,8 +1,17 @@
-export const App = () => {
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Navbar from "./components/Navbar";
+import Home from "./pages/Home";
+import PlaceDetails from "./pages/PlaceDetails";
 
+export const App = () => {
   return (
-    <>
-      <h1>Welcome to Final Project!</h1>
-    </>
+    <BrowserRouter>
+      <Navbar />
+
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/places/:id" element={<PlaceDetails />} />
+      </Routes>
+    </BrowserRouter>
   );
 };
