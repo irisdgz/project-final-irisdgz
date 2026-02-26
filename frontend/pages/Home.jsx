@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import { api } from "../api";
+import { getPlaces } from "../api/places";
 import PlaceCard from "../components/PlaceCard";
 
 export default function Home() {
@@ -9,11 +9,14 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    api("/places")
-      .then((data) => setPlaces(data.places || []))
-      .catch((err) => setError(err.message))
-      .finally(() => setLoading(false));
-  }, []);
+  setLoading(true);
+  setError("");
+
+  getPlaces()
+    .then((data) => setPlaces(data.places || []))
+    .catch((err) => setError(err.message || "Failed to load places"))
+    .finally(() => setLoading(false));
+}, []);
 
   return (
     <Wrapper>
