@@ -4,7 +4,7 @@ import styled from "styled-components";
 export default function Navbar({ isLoggedIn, onLogout }) {
   return (
     <Header>
-      <Brand to="/">Baby Changing Places</Brand>
+      <Brand to="/">MiniStops</Brand>
 
       <Nav>
         <NavItem to="/">Home</NavItem>
