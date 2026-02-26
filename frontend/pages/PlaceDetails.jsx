@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import styled from "styled-components";
-import { api } from "../api";
+import { getPlace } from "../api/places";
+import { getReviews } from "../api/reviews";
 
 export default function PlaceDetails() {
   const { id } = useParams();
@@ -12,15 +13,20 @@ export default function PlaceDetails() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (!id) return;
+
     async function fetchData() {
       try {
-        const placeData = await api(`/places/${id}`);
-        const reviewData = await api(`/places/${id}/reviews`);
+        setLoading(true);
+        setError("");
+
+        const placeData = await getPlace(id);      // { success, place }
+        const reviewData = await getReviews(id);   // { success, reviews }
 
         setPlace(placeData.place);
         setReviews(reviewData.reviews || []);
       } catch (err) {
-        setError(err.message);
+        setError(err.message || "Something went wrong");
       } finally {
         setLoading(false);
       }
@@ -30,7 +36,12 @@ export default function PlaceDetails() {
   }, [id]);
 
   if (loading) return <Wrapper>Loading…</Wrapper>;
-  if (error) return <Wrapper><ErrorText>{error}</ErrorText></Wrapper>;
+  if (error)
+    return (
+      <Wrapper>
+        <ErrorText>{error}</ErrorText>
+      </Wrapper>
+    );
   if (!place) return <Wrapper>Place not found.</Wrapper>;
 
   const features = place.features || {};
@@ -74,7 +85,7 @@ export default function PlaceDetails() {
   );
 }
 
-/* styled components  */
+/* styled components */
 
 const Wrapper = styled.main`
   max-width: 800px;
