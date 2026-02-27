@@ -13,8 +13,8 @@ export default function Navbar() {
       <Brand to="/">MiniStops</Brand>
 
       <Nav>
-        <NavItem to="/">Home</NavItem>
-        <NavItem to="/add-place">Add place</NavItem>
+        {isLoggedIn && <NavItem to="/">Home</NavItem>}
+        {isLoggedIn && <NavItem to="/add-place">Add place</NavItem>}
 
         {isLoggedIn ? (
           <LogoutButton type="button" onClick={logout}>
