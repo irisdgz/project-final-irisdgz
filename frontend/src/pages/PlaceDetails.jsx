@@ -2,38 +2,79 @@ import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import styled from "styled-components";
 import { getPlace } from "../api/places";
-import { getReviews } from "../api/reviews";
+import { getReviews, createReview } from "../api/reviews";
+import { useAuthStore } from "../store/authStore";
 
 export default function PlaceDetails() {
   const { id } = useParams();
+  const accessToken = useAuthStore((s) => s.accessToken);
 
   const [place, setPlace] = useState(null);
   const [reviews, setReviews] = useState([]);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
+  // review form
+  const [rating, setRating] = useState("5");
+  const [comment, setComment] = useState("");
+  const [formError, setFormError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const fetchData = async () => {
     if (!id) return;
 
-    async function fetchData() {
-      try {
-        setLoading(true);
-        setError("");
+    try {
+      setLoading(true);
+      setError("");
 
-        const placeData = await getPlace(id);      // { success, place }
-        const reviewData = await getReviews(id);   // { success, reviews }
+      const placeData = await getPlace(id); // { success, place }
+      const reviewData = await getReviews(id); // { success, reviews }
 
-        setPlace(placeData.place);
-        setReviews(reviewData.reviews || []);
-      } catch (err) {
-        setError(err.message || "Something went wrong");
-      } finally {
-        setLoading(false);
-      }
+      setPlace(placeData.place);
+      setReviews(reviewData.reviews || []);
+    } catch (err) {
+      setError(err.message || "Something went wrong");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id]);
+
+  const onSubmitReview = async (e) => {
+    e.preventDefault();
+    setFormError("");
+
+    if (!accessToken) {
+      setFormError("You need to be logged in to leave a review.");
+      return;
     }
 
-    fetchData();
-  }, [id]);
+    const ratingNum = Number(rating);
+
+    if (!Number.isInteger(ratingNum) || ratingNum < 1 || ratingNum > 5) {
+      setFormError("Rating must be between 1 and 5.");
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      await createReview(id, { rating: ratingNum, comment }, accessToken);
+
+      setComment("");
+      setRating("5");
+
+      // refresh reviews + place rating/count
+      await fetchData();
+    } catch (err) {
+      setFormError(err.message || "Could not post review.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   if (loading) return <Wrapper>Loading…</Wrapper>;
   if (error)
@@ -53,9 +94,9 @@ export default function PlaceDetails() {
       <Title>{place.name}</Title>
       <City>{place.city}</City>
 
-      <Rating>
+      <RatingText>
         ⭐ {place.avgRating ?? 0} ({place.reviewCount ?? 0} reviews)
-      </Rating>
+      </RatingText>
 
       <Section>
         <h2>Features</h2>
@@ -76,9 +117,48 @@ export default function PlaceDetails() {
           reviews.map((r) => (
             <ReviewCard key={r._id}>
               <strong>⭐ {r.rating}</strong>
-              <p>{r.comment}</p>
+              {r.comment ? <p>{r.comment}</p> : <p>No comment</p>}
             </ReviewCard>
           ))
+        )}
+      </Section>
+
+      <Section>
+        <h2>Leave a review</h2>
+
+        {!accessToken ? (
+          <p>
+            Please <Link to="/login">log in</Link> to leave a review.
+          </p>
+        ) : (
+          <Form onSubmit={onSubmitReview}>
+            <label>
+              Rating
+              <select value={rating} onChange={(e) => setRating(e.target.value)}>
+                <option value="5">5 - Great</option>
+                <option value="4">4 - Good</option>
+                <option value="3">3 - OK</option>
+                <option value="2">2 - Not great</option>
+                <option value="1">1 - Bad</option>
+              </select>
+            </label>
+
+            <label>
+              Comment (optional)
+              <textarea
+                value={comment}
+                onChange={(e) => setComment(e.target.value)}
+                rows={3}
+                placeholder="Write a short comment…"
+              />
+            </label>
+
+            {formError && <ErrorText role="alert">{formError}</ErrorText>}
+
+            <button type="submit" disabled={isSubmitting}>
+              {isSubmitting ? "Posting..." : "Post review"}
+            </button>
+          </Form>
         )}
       </Section>
     </Wrapper>
@@ -110,7 +190,7 @@ const City = styled.p`
   color: #666;
 `;
 
-const Rating = styled.p`
+const RatingText = styled.p`
   margin: 12px 0 24px;
   font-weight: 600;
 `;
@@ -134,6 +214,41 @@ const ReviewCard = styled.div`
   margin-bottom: 12px;
 `;
 
+const Form = styled.form`
+  display: grid;
+  gap: 12px;
+  max-width: 520px;
+
+  label {
+    display: grid;
+    gap: 6px;
+    font-size: 14px;
+  }
+
+  select,
+  textarea {
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    font-family: inherit;
+    font-size: 14px;
+  }
+
+  button {
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    background: white;
+    cursor: pointer;
+  }
+
+  button:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+`;
+
 const ErrorText = styled.p`
   color: red;
+  margin: 0;
 `;

@@ -4,6 +4,7 @@ import Home from "./pages/Home";
 import PlaceDetails from "./pages/PlaceDetails";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
+import AddPlace from "./pages/AddPlace";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 export const App = () => {
@@ -30,7 +31,7 @@ export const App = () => {
           }
         />
 
-         <Route
+        <Route
           path="/add-place"
           element={
             <ProtectedRoute>
