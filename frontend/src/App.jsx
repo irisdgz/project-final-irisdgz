@@ -30,6 +30,15 @@ export const App = () => {
           }
         />
 
+         <Route
+          path="/add-place"
+          element={
+            <ProtectedRoute>
+              <AddPlace />
+            </ProtectedRoute>
+          }
+        />
+
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
       </Routes>
