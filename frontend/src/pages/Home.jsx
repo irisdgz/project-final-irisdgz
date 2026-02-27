@@ -54,22 +54,25 @@ const Wrapper = styled.main`
 `;
 
 const Hero = styled.section`
-  margin-bottom: 48px;
+  margin: 0 auto 64px;
+  text-align: center;
+  max-width: 900px;
 
   h1 {
-    margin: 0;
-    font-size: clamp(28px, 4vw, 48px);
-    line-height: 1.1;
-    letter-spacing: -0.03em;
-  }
-
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;        
+  font-size: clamp(40px, 6vw, 72px);
+  line-height: 1.1;
+  letter-spacing: -0.02em; 
+}
   p {
-    margin-top: 12px;
-    font-size: 16px;
-    color: #666;
+    margin-top: 20px;
+    font-size: 18px;
+    color: #555;
+    font-weight: 400;
   }
 `;
-
 const Section = styled.section`
   border-top: 1px solid #e7e7e7;
   padding-top: 32px;
