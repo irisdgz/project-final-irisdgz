@@ -1,6 +1,6 @@
 import express from "express";
 import { Place } from "../models/Place.js";
-import { requireAuth } from "../middleware/requireAuth.js";
+import { authenticateUser } from "../middleware/auth.js";
 
 const router = express.Router();
 
@@ -18,40 +18,44 @@ router.get("/", async (req, res, next) => {
 router.get("/:id", async (req, res, next) => {
   try {
     const place = await Place.findById(req.params.id);
+
     if (!place) {
       return res.status(404).json({ success: false, message: "Place not found" });
     }
+
     res.json({ success: true, place });
   } catch (err) {
     next(err);
   }
 });
 
-// POST add place (protected)
-router.post("/", requireAuth, async (req, res, next) => {
+// POST add place (protected) - accepts lat/lng
+router.post("/", authenticateUser, async (req, res, next) => {
   try {
-    const { name, category, address, city, location, features } = req.body;
+    const { name, category, address, city, lat, lng, features } = req.body;
 
-    if (!name || !city) {
+    if (!name || !city || lat == null || lng == null) {
       return res.status(400).json({
         success: false,
-        message: "Name and city are required",
+        message: "name, city, lat, lng are required",
       });
     }
 
-    const coords = location?.coordinates;
-    const lng = Array.isArray(coords) ? coords[0] : null;
-    const lat = Array.isArray(coords) ? coords[1] : null;
+    const latNum = Number(lat);
+    const lngNum = Number(lng);
 
-    if (
-      typeof lng !== "number" ||
-      typeof lat !== "number" ||
-      lng < -180 || lng > 180 ||
-      lat < -90 || lat > 90
-    ) {
+    const validCoords =
+      Number.isFinite(latNum) &&
+      Number.isFinite(lngNum) &&
+      latNum >= -90 &&
+      latNum <= 90 &&
+      lngNum >= -180 &&
+      lngNum <= 180;
+
+    if (!validCoords) {
       return res.status(400).json({
         success: false,
-        message: "Valid location.coordinates [lng, lat] required",
+        message: "lat must be -90..90 and lng must be -180..180",
       });
     }
 
@@ -60,8 +64,8 @@ router.post("/", requireAuth, async (req, res, next) => {
       category,
       address,
       city,
-      location: { type: "Point", coordinates: [lng, lat] },
       features: features || {},
+      location: { type: "Point", coordinates: [lngNum, latNum] }, // Mongo wants [lng, lat]
       createdBy: req.user.userId,
     });
 
