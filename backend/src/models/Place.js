@@ -1,78 +1,56 @@
-import express from "express";
-import { Place } from "../models/Place.js";
-import { authenticateUser } from "../middleware/auth.js";
+import mongoose from "mongoose";
 
-const router = express.Router();
+const placeSchema = new mongoose.Schema(
+  {
+    name: { type: String, required: true, trim: true, minlength: 2 },
 
-// GET all places
-router.get("/", async (req, res, next) => {
-  try {
-    const places = await Place.find().sort({ createdAt: -1 });
-    res.json({ success: true, places });
-  } catch (err) {
-    next(err);
-  }
-});
+    category: {
+      type: String,
+      enum: ["cafe", "restaurant", "mall", "public", "other"],
+      default: "other",
+    },
 
-// GET one place
-router.get("/:id", async (req, res, next) => {
-  try {
-    const place = await Place.findById(req.params.id);
+    address: { type: String, trim: true },
 
-    if (!place) {
-      return res.status(404).json({ success: false, message: "Place not found" });
-    }
+    city: { type: String, required: true, trim: true },
 
-    res.json({ success: true, place });
-  } catch (err) {
-    next(err);
-  }
-});
+    // GeoJSON Point (Mongo stores [lng, lat])
+    location: {
+      type: {
+        type: String,
+        enum: ["Point"],
+        default: "Point",
+        required: true,
+      },
+      coordinates: {
+        type: [Number],
+        required: true,
+        validate: {
+          validator: (arr) =>
+            Array.isArray(arr) &&
+            arr.length === 2 &&
+            arr.every((n) => Number.isFinite(n)),
+          message: "location.coordinates must be [lng, lat] (two numbers)",
+        },
+      },
+    },
 
-// POST add place (protected) - accepts lat/lng
-router.post("/", authenticateUser, async (req, res, next) => {
-  try {
-    const { name, category, address, city, lat, lng, features } = req.body;
+    features: {
+      changingTable: { type: Boolean, default: true },
+      privateRoom: { type: Boolean, default: false },
+      strollerAccess: { type: Boolean, default: false },
+      accessible: { type: Boolean, default: false },
+      clean: { type: Boolean, default: false },
+    },
 
-    if (!name || !city || lat == null || lng == null) {
-      return res.status(400).json({
-        success: false,
-        message: "name, city, lat, lng are required",
-      });
-    }
+    avgRating: { type: Number, default: 0, min: 0, max: 5 },
+    reviewCount: { type: Number, default: 0, min: 0 },
 
-    const latNum = Number(lat);
-    const lngNum = Number(lng);
+    createdBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+  },
+  { timestamps: true }
+);
 
-    const validCoords =
-      Number.isFinite(latNum) &&
-      Number.isFinite(lngNum) &&
-      latNum >= -90 &&
-      latNum <= 90 &&
-      lngNum >= -180 &&
-      lngNum <= 180;
+placeSchema.index({ location: "2dsphere" });
 
-    if (!validCoords) {
-      return res.status(400).json({
-        success: false,
-        message: "lat must be -90..90 and lng must be -180..180",
-      });
-    }
-
-    const newPlace = await Place.create({
-      name,
-      category,
-      address,
-      city,
-      features: features || {},
-      location: { type: "Point", coordinates: [lngNum, latNum] }, // Mongo wants [lng, lat]
-      createdBy: req.user.userId,
-    });
-
-    res.status(201).json({ success: true, place: newPlace });
-  } catch (err) {
-    next(err);
-  }
-});
-
-export default router;
+export const Place = mongoose.model("Place", placeSchema);
