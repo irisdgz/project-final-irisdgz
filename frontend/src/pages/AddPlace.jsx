@@ -1,4 +1,4 @@
-/*import { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { useAuthStore } from "../store/authStore";
@@ -127,7 +127,7 @@ export default function AddPlace() {
 
 /* styled */
 
-/*const Wrapper = styled.main`
+const Wrapper = styled.main`
   max-width: 600px;
   margin: 0 auto;
   padding: 40px 16px;
