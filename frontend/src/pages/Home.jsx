@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { getPlaces } from "../api/places";
 import PlaceCard from "../components/PlaceCard";
+import MapTest from "../components/MapTest";
 
 export default function Home() {
   const [places, setPlaces] = useState([]);
@@ -9,14 +10,14 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-  setLoading(true);
-  setError("");
+    setLoading(true);
+    setError("");
 
-  getPlaces()
-    .then((data) => setPlaces(data.places || []))
-    .catch((err) => setError(err.message || "Failed to load places"))
-    .finally(() => setLoading(false));
-}, []);
+    getPlaces()
+      .then((data) => setPlaces(data.places || []))
+      .catch((err) => setError(err.message || "Failed to load places"))
+      .finally(() => setLoading(false));
+  }, []);
 
   return (
     <Wrapper>
@@ -26,6 +27,8 @@ export default function Home() {
           Discover clean, accessible and family-friendly places.
         </p>
       </Hero>
+
+      <MapTest />
 
       <Section>
         {loading && <p>Loading places…</p>}
@@ -45,52 +48,32 @@ export default function Home() {
   );
 }
 
-/*styled components */
-
 const Wrapper = styled.main`
-  padding: 40px 16px;
-  max-width: 1120px;
+  padding: 24px 16px 40px;
+  max-width: 1200px;
   margin: 0 auto;
 `;
 
 const Hero = styled.section`
-  margin: 0 auto 64px;
-  text-align: center;
-  max-width: 900px;
+  margin-bottom: 24px;
 
-  h1 {
-  margin: 0;
-  font-family: 'Inter', sans-serif;
-  font-weight: 400;        
-  font-size: clamp(40px, 6vw, 72px);
-  line-height: 1.1;
-  letter-spacing: -0.02em; 
-}
-  p {
-    margin-top: 20px;
-    font-size: 18px;
-    color: #555;
-    font-weight: 400;
+  .muted {
+    color: #666;
   }
 `;
+
 const Section = styled.section`
-  border-top: 1px solid #e7e7e7;
-  padding-top: 32px;
+  display: grid;
+  gap: 16px;
 `;
 
 const Grid = styled.div`
   display: grid;
-  gap: 20px;
-
-  @media (min-width: 640px) {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  @media (min-width: 1024px) {
-    grid-template-columns: repeat(3, 1fr);
-  }
+  gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
 `;
 
 const ErrorText = styled.p`
-  color: crimson;
+  color: red;
+  margin: 0;
 `;
