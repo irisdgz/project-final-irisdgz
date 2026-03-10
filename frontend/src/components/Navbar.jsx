@@ -3,10 +3,8 @@ import styled from "styled-components";
 import { useAuthStore } from "../store/authStore";
 
 export default function Navbar() {
-  const accessToken = useAuthStore((s) => s.accessToken);
-  const logout = useAuthStore((s) => s.logout);
-
-  const isLoggedIn = !!accessToken;
+  const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
+  const logout = useAuthStore((state) => state.logout);
 
   return (
     <Header>
