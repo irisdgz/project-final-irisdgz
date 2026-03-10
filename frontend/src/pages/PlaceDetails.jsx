@@ -7,85 +7,88 @@ import { useAuthStore } from "../store/authStore";
 
 export default function PlaceDetails() {
   const { id } = useParams();
-  const accessToken = useAuthStore((s) => s.accessToken);
+  const accessToken = useAuthStore((state) => state.accessToken);
 
   const [place, setPlace] = useState(null);
   const [reviews, setReviews] = useState([]);
-  const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-  // review form
   const [rating, setRating] = useState("5");
   const [comment, setComment] = useState("");
-  const [formError, setFormError] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const fetchData = async () => {
-    if (!id) return;
-
-    try {
-      setLoading(true);
-      setError("");
-
-      const placeData = await getPlace(id); // { success, place }
-      const reviewData = await getReviews(id); // { success, reviews }
-
-      setPlace(placeData.place);
-      setReviews(reviewData.reviews || []);
-    } catch (err) {
-      setError(err.message || "Something went wrong");
-    } finally {
-      setLoading(false);
-    }
-  };
+  const [reviewError, setReviewError] = useState("");
+  const [success, setSuccess] = useState("");
 
   useEffect(() => {
-    fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const loadPlaceDetails = async () => {
+      try {
+        setLoading(true);
+        setError("");
+
+        const placeResponse = await getPlace(id);
+        const reviewsResponse = await getReviews(id);
+
+        setPlace(placeResponse.place);
+        setReviews(reviewsResponse.reviews || []);
+      } catch (err) {
+        setError(err.message || "Something went wrong");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadPlaceDetails();
   }, [id]);
 
-  const onSubmitReview = async (e) => {
-    e.preventDefault();
-    setFormError("");
+  const handleSubmitReview = async (event) => {
+    event.preventDefault();
+    setReviewError("");
+    setSuccess("");
 
     if (!accessToken) {
-      setFormError("You need to be logged in to leave a review.");
+      setReviewError("You need to log in first.");
       return;
     }
 
-    const ratingNum = Number(rating);
-
-    if (!Number.isInteger(ratingNum) || ratingNum < 1 || ratingNum > 5) {
-      setFormError("Rating must be between 1 and 5.");
-      return;
-    }
-
-    setIsSubmitting(true);
     try {
-      await createReview(id, { rating: ratingNum, comment }, accessToken);
+      await createReview(
+        id,
+        {
+          rating: Number(rating),
+          comment: comment.trim(),
+        },
+        accessToken
+      );
 
-      setComment("");
+      const placeResponse = await getPlace(id);
+      const reviewsResponse = await getReviews(id);
+
+      setPlace(placeResponse.place);
+      setReviews(reviewsResponse.reviews || []);
+
       setRating("5");
-
-      // refresh reviews + place rating/count
-      await fetchData();
+      setComment("");
+      setSuccess("Review added!");
     } catch (err) {
-      setFormError(err.message || "Could not post review.");
-    } finally {
-      setIsSubmitting(false);
+      setReviewError(err.message || "Could not post review");
     }
   };
 
-  if (loading) return <Wrapper>Loading…</Wrapper>;
-  if (error)
+  if (loading) {
+    return <Wrapper>Loading...</Wrapper>;
+  }
+
+  if (error) {
     return (
       <Wrapper>
         <ErrorText>{error}</ErrorText>
       </Wrapper>
     );
-  if (!place) return <Wrapper>Place not found.</Wrapper>;
+  }
 
-  const features = place.features || {};
+  if (!place) {
+    return <Wrapper>Place not found.</Wrapper>;
+  }
 
   return (
     <Wrapper>
@@ -101,10 +104,10 @@ export default function PlaceDetails() {
       <Section>
         <h2>Features</h2>
         <ul>
-          <li>Changing table: {features.changingTable ? "Yes" : "No"}</li>
-          <li>Private room: {features.privateRoom ? "Yes" : "No"}</li>
-          <li>Stroller access: {features.strollerAccess ? "Yes" : "No"}</li>
-          <li>Accessible: {features.accessible ? "Yes" : "No"}</li>
+          <li>Changing table: {place.features?.changingTable ? "Yes" : "No"}</li>
+          <li>Private room: {place.features?.privateRoom ? "Yes" : "No"}</li>
+          <li>Stroller access: {place.features?.strollerAccess ? "Yes" : "No"}</li>
+          <li>Accessible: {place.features?.accessible ? "Yes" : "No"}</li>
         </ul>
       </Section>
 
@@ -114,10 +117,10 @@ export default function PlaceDetails() {
         {reviews.length === 0 ? (
           <p>No reviews yet.</p>
         ) : (
-          reviews.map((r) => (
-            <ReviewCard key={r._id}>
-              <strong>⭐ {r.rating}</strong>
-              {r.comment ? <p>{r.comment}</p> : <p>No comment</p>}
+          reviews.map((review) => (
+            <ReviewCard key={review._id}>
+              <strong>⭐ {review.rating}</strong>
+              {review.comment && <p>{review.comment}</p>}
             </ReviewCard>
           ))
         )}
@@ -131,41 +134,38 @@ export default function PlaceDetails() {
             Please <Link to="/login">log in</Link> to leave a review.
           </p>
         ) : (
-          <Form onSubmit={onSubmitReview}>
+          <Form onSubmit={handleSubmitReview}>
             <label>
               Rating
-              <select value={rating} onChange={(e) => setRating(e.target.value)}>
-                <option value="5">5 - Great</option>
-                <option value="4">4 - Good</option>
-                <option value="3">3 - OK</option>
-                <option value="2">2 - Not great</option>
-                <option value="1">1 - Bad</option>
+              <select value={rating} onChange={(event) => setRating(event.target.value)}>
+                <option value="5">5</option>
+                <option value="4">4</option>
+                <option value="3">3</option>
+                <option value="2">2</option>
+                <option value="1">1</option>
               </select>
             </label>
 
             <label>
-              Comment (optional)
+              Comment
               <textarea
                 value={comment}
-                onChange={(e) => setComment(e.target.value)}
-                rows={3}
-                placeholder="Write a short comment…"
+                onChange={(event) => setComment(event.target.value)}
+                rows={4}
+                placeholder="Write your review here"
               />
             </label>
 
-            {formError && <ErrorText role="alert">{formError}</ErrorText>}
+            {reviewError && <ErrorText>{reviewError}</ErrorText>}
+            {success && <SuccessText>{success}</SuccessText>}
 
-            <button type="submit" disabled={isSubmitting}>
-              {isSubmitting ? "Posting..." : "Post review"}
-            </button>
+            <button type="submit">Post review</button>
           </Form>
         )}
       </Section>
     </Wrapper>
   );
 }
-
-/* styled components */
 
 const Wrapper = styled.main`
   max-width: 800px;
@@ -217,38 +217,34 @@ const ReviewCard = styled.div`
 const Form = styled.form`
   display: grid;
   gap: 12px;
-  max-width: 520px;
+  max-width: 500px;
 
   label {
     display: grid;
     gap: 6px;
-    font-size: 14px;
   }
 
   select,
   textarea {
-    padding: 10px 12px;
-    border-radius: 10px;
+    padding: 10px;
     border: 1px solid #ddd;
+    border-radius: 8px;
     font-family: inherit;
-    font-size: 14px;
   }
 
   button {
-    padding: 10px 12px;
-    border-radius: 10px;
+    padding: 10px;
     border: 1px solid #ddd;
+    border-radius: 8px;
     background: white;
     cursor: pointer;
-  }
-
-  button:disabled {
-    opacity: 0.7;
-    cursor: not-allowed;
   }
 `;
 
 const ErrorText = styled.p`
   color: red;
-  margin: 0;
+`;
+
+const SuccessText = styled.p`
+  color: green;
 `;

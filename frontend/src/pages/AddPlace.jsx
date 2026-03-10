@@ -8,7 +8,7 @@ const API_BASE_URL =
 
 export default function AddPlace() {
   const navigate = useNavigate();
-  const accessToken = useAuthStore((s) => s.accessToken);
+  const accessToken = useAuthStore((state) => state.accessToken);
 
   const [name, setName] = useState("");
   const [city, setCity] = useState("");
@@ -17,30 +17,30 @@ export default function AddPlace() {
   const [lng, setLng] = useState("");
   const [error, setError] = useState("");
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async (event) => {
+    event.preventDefault();
     setError("");
 
     if (!accessToken) {
-      setError("You must be logged in.");
+      setError("You need to log in first.");
       return;
     }
 
-    const latNum = Number(lat);
-    const lngNum = Number(lng);
+    const latNumber = Number(lat);
+    const lngNumber = Number(lng);
 
     if (!name.trim() || !city.trim()) {
-      setError("Name and city are required.");
+      setError("Please fill in name and city.");
       return;
     }
 
-    if (!Number.isFinite(latNum) || !Number.isFinite(lngNum)) {
-      setError("Lat and Lng must be valid numbers.");
+    if (isNaN(latNumber) || isNaN(lngNumber)) {
+      setError("Please enter valid numbers for latitude and longitude.");
       return;
     }
 
     try {
-      const res = await fetch(`${API_BASE_URL}/places`, {
+      const response = await fetch(`${API_BASE_URL}/places`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -50,21 +50,21 @@ export default function AddPlace() {
           name: name.trim(),
           city: city.trim(),
           category,
-          lat: latNum,
-          lng: lngNum,
+          lat: latNumber,
+          lng: lngNumber,
         }),
       });
 
-      const data = await res.json();
+      const data = await response.json();
 
-      if (!res.ok) {
-        setError(data?.message || "Could not create place.");
+      if (!response.ok) {
+        setError(data.message || "Could not add place.");
         return;
       }
 
       navigate("/");
-    } catch {
-      setError("Network error. Try again.");
+    } catch (error) {
+      setError("Something went wrong. Please try again.");
     }
   };
 
@@ -75,19 +75,27 @@ export default function AddPlace() {
       <Form onSubmit={handleSubmit}>
         <label>
           Name *
-          <input value={name} onChange={(e) => setName(e.target.value)} />
+          <input
+            type="text"
+            value={name}
+            onChange={(event) => setName(event.target.value)}
+          />
         </label>
 
         <label>
           City *
-          <input value={city} onChange={(e) => setCity(e.target.value)} />
+          <input
+            type="text"
+            value={city}
+            onChange={(event) => setCity(event.target.value)}
+          />
         </label>
 
         <label>
           Category
           <select
             value={category}
-            onChange={(e) => setCategory(e.target.value)}
+            onChange={(event) => setCategory(event.target.value)}
           >
             <option value="cafe">Cafe</option>
             <option value="restaurant">Restaurant</option>
@@ -101,8 +109,9 @@ export default function AddPlace() {
           <label>
             Lat *
             <input
+              type="text"
               value={lat}
-              onChange={(e) => setLat(e.target.value)}
+              onChange={(event) => setLat(event.target.value)}
               placeholder="59.334"
             />
           </label>
@@ -110,8 +119,9 @@ export default function AddPlace() {
           <label>
             Lng *
             <input
+              type="text"
               value={lng}
-              onChange={(e) => setLng(e.target.value)}
+              onChange={(event) => setLng(event.target.value)}
               placeholder="18.063"
             />
           </label>
@@ -124,8 +134,6 @@ export default function AddPlace() {
     </Wrapper>
   );
 }
-
-/* styled */
 
 const Wrapper = styled.main`
   max-width: 600px;
