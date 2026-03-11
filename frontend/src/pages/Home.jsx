@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { getPlaces } from "../api/places";
 import PlaceCard from "../components/PlaceCard";
-import MapTest from "../components/MapTest";
+import PlacesMap from "../components/PlacesMap";
 
 export default function Home() {
   const [places, setPlaces] = useState([]);
@@ -28,7 +28,7 @@ export default function Home() {
         </p>
       </Hero>
 
-      <MapTest />
+      <PlacesMap places={places} />
 
       <Section>
         {loading && <p>Loading places…</p>}
