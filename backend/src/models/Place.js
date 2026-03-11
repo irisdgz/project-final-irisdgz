@@ -37,9 +37,11 @@ const placeSchema = new mongoose.Schema(
 
     features: {
       changingTable: { type: Boolean, default: true },
-      privateRoom: { type: Boolean, default: false },
+      babyLounge: { type: Boolean, default: false },
       strollerAccess: { type: Boolean, default: false },
       accessible: { type: Boolean, default: false },
+      disposableMats: { type: Boolean, default: false },
+      diaperBags: { type: Boolean, default: false },
       clean: { type: Boolean, default: false },
     },
 
