@@ -109,28 +109,28 @@ export default function AddPlace() {
 
   return (
     <Wrapper>
-      <h1>Add a new place</h1>
+      <Title>Add a new place</Title>
 
       <Form onSubmit={handleSubmit}>
-        <label>
+        <FieldLabel>
           Name *
           <input
             type="text"
             value={name}
             onChange={(event) => setName(event.target.value)}
           />
-        </label>
+        </FieldLabel>
 
-        <label>
+        <FieldLabel>
           City *
           <input
             type="text"
             value={city}
             onChange={(event) => setCity(event.target.value)}
           />
-        </label>
+        </FieldLabel>
 
-        <label>
+        <FieldLabel>
           Category
           <select
             value={category}
@@ -142,7 +142,7 @@ export default function AddPlace() {
             <option value="public">Public</option>
             <option value="other">Other</option>
           </select>
-        </label>
+        </FieldLabel>
 
         <MapSection>
           <MapText>Pick the location on the map *</MapText>
@@ -166,7 +166,7 @@ export default function AddPlace() {
         </MapSection>
 
         <Row>
-          <label>
+          <FieldLabel>
             Lat *
             <input
               type="text"
@@ -174,9 +174,9 @@ export default function AddPlace() {
               onChange={(event) => setLat(event.target.value)}
               placeholder="59.334"
             />
-          </label>
+          </FieldLabel>
 
-          <label>
+          <FieldLabel>
             Lng *
             <input
               type="text"
@@ -184,7 +184,7 @@ export default function AddPlace() {
               onChange={(event) => setLng(event.target.value)}
               placeholder="18.063"
             />
-          </label>
+          </FieldLabel>
         </Row>
 
         <FeatureSection>
@@ -273,23 +273,32 @@ const Wrapper = styled.main`
   max-width: 700px;
   margin: 0 auto;
   padding: 40px 16px;
+
+  @media (max-width: 600px) {
+    padding: 24px 12px;
+  }
+`;
+
+const Title = styled.h1`
+  margin-bottom: 24px;
+
+  @media (max-width: 600px) {
+    margin-bottom: 20px;
+    font-size: 32px;
+  }
 `;
 
 const Form = styled.form`
   display: grid;
   gap: 16px;
 
-  label {
-    display: grid;
-    gap: 6px;
-    font-size: 14px;
-  }
-
   input[type="text"],
   select {
     padding: 8px 10px;
     border-radius: 8px;
     border: 1px solid #ddd;
+    width: 100%;
+    box-sizing: border-box;
   }
 
   button {
@@ -299,6 +308,12 @@ const Form = styled.form`
     background: white;
     cursor: pointer;
   }
+`;
+
+const FieldLabel = styled.label`
+  display: grid;
+  gap: 6px;
+  font-size: 14px;
 `;
 
 const MapSection = styled.div`
@@ -315,6 +330,10 @@ const Row = styled.div`
   display: grid;
   gap: 12px;
   grid-template-columns: 1fr 1fr;
+
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr;
+  }
 `;
 
 const FeatureSection = styled.div`
@@ -325,27 +344,36 @@ const FeatureSection = styled.div`
 const FeatureHeading = styled.h2`
   margin: 0;
   font-size: 18px;
+
+  @media (max-width: 600px) {
+    font-size: 16px;
+  }
 `;
 
 const CheckboxLabel = styled.label`
-  display: flex !important;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 1fr 24px;
   align-items: center;
+  column-gap: 12px;
   width: 100%;
+  max-width: 420px;
   font-size: 15px;
   cursor: pointer;
-  padding: 6px 0;
+  padding: 4px 0;
 
   span {
-    flex: 1;
+    line-height: 1.4;
   }
 
   input[type="checkbox"] {
-    width: 16px;
-    height: 16px;
+    width: 18px;
+    height: 18px;
     margin: 0;
-    padding: 0;
-    flex-shrink: 0;
+  }
+
+  @media (max-width: 600px) {
+    max-width: 100%;
+    font-size: 14px;
   }
 `;
 

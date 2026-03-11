@@ -12,14 +12,14 @@ export default function Navbar() {
 
       <Nav>
         {isLoggedIn && <NavItem to="/">Home</NavItem>}
-        {isLoggedIn && <NavItem to="/add-place">Add place</NavItem>}
+        {isLoggedIn && <NavItem to="/add-place">Add a place</NavItem>}
 
         {isLoggedIn ? (
           <LogoutButton type="button" onClick={logout}>
             Log out
           </LogoutButton>
         ) : (
-          <NavItem to="/login">Log in</NavItem>
+         
         )}
       </Nav>
     </Header>
@@ -30,14 +30,17 @@ const Header = styled.header`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 12px 16px;
+
+  padding: 20px 40px;
   border-bottom: 1px solid #eee;
 `;
 
 const Brand = styled(Link)`
+  font-size: 28px;
   font-weight: 700;
   text-decoration: none;
-  color: inherit;
+  color: black;
+  letter-spacing: -0.5px;
 `;
 
 const Nav = styled.nav`
