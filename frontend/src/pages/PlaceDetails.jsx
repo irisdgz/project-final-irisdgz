@@ -108,6 +108,7 @@ export default function PlaceDetails() {
           <li>Private room: {place.features?.privateRoom ? "Yes" : "No"}</li>
           <li>Stroller access: {place.features?.strollerAccess ? "Yes" : "No"}</li>
           <li>Accessible: {place.features?.accessible ? "Yes" : "No"}</li>
+          <li>Cleanliness: {place.features?.clean ? "Yes" : "No"}</li>
         </ul>
       </Section>
 

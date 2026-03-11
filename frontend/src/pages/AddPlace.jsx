@@ -4,15 +4,16 @@ import styled from "styled-components";
 import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
 import { useAuthStore } from "../store/authStore";
 
-const API_BASE_URL =
-  import.meta.env.VITE_API_URL || "http://localhost:8081";
+const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8081";
 
 function LocationPicker({ lat, lng, setLat, setLng }) {
   useMapEvents({
     click(event) {
-      const { lat, lng } = event.latlng;
-      setLat(lat.toFixed(6));
-      setLng(lng.toFixed(6));
+      const clickedLat = event.latlng.lat;
+      const clickedLng = event.latlng.lng;
+
+      setLat(clickedLat.toFixed(6));
+      setLng(clickedLng.toFixed(6));
     },
   });
 
@@ -32,6 +33,23 @@ export default function AddPlace() {
   const [lng, setLng] = useState("");
   const [error, setError] = useState("");
 
+  const [features, setFeatures] = useState({
+    changingTable: false,
+    privateRoom: false,
+    strollerAccess: false,
+    accessible: false,
+    clean: false,
+  });
+
+  const handleFeatureChange = (event) => {
+    const { name, checked } = event.target;
+
+    setFeatures((prevFeatures) => ({
+      ...prevFeatures,
+      [name]: checked,
+    }));
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     setError("");
@@ -50,7 +68,7 @@ export default function AddPlace() {
     }
 
     if (isNaN(latNumber) || isNaN(lngNumber)) {
-      setError("Please select a valid location on the map.");
+      setError("Please choose a location on the map.");
       return;
     }
 
@@ -67,6 +85,7 @@ export default function AddPlace() {
           category,
           lat: latNumber,
           lng: lngNumber,
+          features,
         }),
       });
 
@@ -83,7 +102,7 @@ export default function AddPlace() {
     }
   };
 
-  const defaultCenter = lat && lng ? [Number(lat), Number(lng)] : [59.3293, 18.0686];
+  const mapCenter = lat && lng ? [Number(lat), Number(lng)] : [59.3293, 18.0686];
 
   return (
     <Wrapper>
@@ -123,9 +142,10 @@ export default function AddPlace() {
         </label>
 
         <MapSection>
-          <MapLabel>Pick location on map *</MapLabel>
+          <MapText>Pick the location on the map *</MapText>
+
           <MapContainer
-            center={defaultCenter}
+            center={mapCenter}
             zoom={12}
             style={{ height: "320px", width: "100%" }}
           >
@@ -159,6 +179,60 @@ export default function AddPlace() {
           </label>
         </Row>
 
+        <FeatureSection>
+          <FeatureHeading>Features</FeatureHeading>
+
+          <CheckboxLabel>
+            <input
+              type="checkbox"
+              name="changingTable"
+              checked={features.changingTable}
+              onChange={handleFeatureChange}
+            />
+            Changing table
+          </CheckboxLabel>
+
+          <CheckboxLabel>
+            <input
+              type="checkbox"
+              name="privateRoom"
+              checked={features.privateRoom}
+              onChange={handleFeatureChange}
+            />
+            Private room
+          </CheckboxLabel>
+
+          <CheckboxLabel>
+            <input
+              type="checkbox"
+              name="strollerAccess"
+              checked={features.strollerAccess}
+              onChange={handleFeatureChange}
+            />
+            Stroller access
+          </CheckboxLabel>
+
+          <CheckboxLabel>
+            <input
+              type="checkbox"
+              name="accessible"
+              checked={features.accessible}
+              onChange={handleFeatureChange}
+            />
+            Accessible
+          </CheckboxLabel>
+
+          <CheckboxLabel>
+            <input
+              type="checkbox"
+              name="clean"
+              checked={features.clean}
+              onChange={handleFeatureChange}
+            />
+            Cleanliness
+          </CheckboxLabel>
+        </FeatureSection>
+
         {error && <Error>{error}</Error>}
 
         <button type="submit">Create place</button>
@@ -175,7 +249,7 @@ const Wrapper = styled.main`
 
 const Form = styled.form`
   display: grid;
-  gap: 12px;
+  gap: 16px;
 
   label {
     display: grid;
@@ -204,7 +278,7 @@ const MapSection = styled.div`
   gap: 8px;
 `;
 
-const MapLabel = styled.p`
+const MapText = styled.p`
   margin: 0;
   font-size: 14px;
 `;
@@ -213,6 +287,23 @@ const Row = styled.div`
   display: grid;
   gap: 12px;
   grid-template-columns: 1fr 1fr;
+`;
+
+const FeatureSection = styled.div`
+  display: grid;
+  gap: 10px;
+`;
+
+const FeatureHeading = styled.h2`
+  margin: 0;
+  font-size: 18px;
+`;
+
+const CheckboxLabel = styled.label`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
 `;
 
 const Error = styled.p`
