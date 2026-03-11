@@ -38,6 +38,8 @@ export default function AddPlace() {
     privateRoom: false,
     strollerAccess: false,
     accessible: false,
+    disposableMats: false,
+    diaperBags: false,
     clean: false,
   });
 
@@ -180,7 +182,7 @@ export default function AddPlace() {
         </Row>
 
         <FeatureSection>
-          <FeatureHeading>Features</FeatureHeading>
+          <h2>Features</h2>
 
           <CheckboxLabel>
             <input
@@ -189,17 +191,17 @@ export default function AddPlace() {
               checked={features.changingTable}
               onChange={handleFeatureChange}
             />
-            Changing table
+            Changing table available
           </CheckboxLabel>
 
           <CheckboxLabel>
             <input
               type="checkbox"
-              name="privateRoom"
-              checked={features.privateRoom}
+              name="babyLounge"
+              checked={features.babyLounge}
               onChange={handleFeatureChange}
             />
-            Private room
+            Baby lounge available
           </CheckboxLabel>
 
           <CheckboxLabel>
@@ -209,7 +211,7 @@ export default function AddPlace() {
               checked={features.strollerAccess}
               onChange={handleFeatureChange}
             />
-            Stroller access
+            Stroller friendly
           </CheckboxLabel>
 
           <CheckboxLabel>
@@ -220,6 +222,27 @@ export default function AddPlace() {
               onChange={handleFeatureChange}
             />
             Accessible
+          </CheckboxLabel>
+          
+          <CheckboxLabel>
+            <input
+              type="checkbox"
+              name="disposableMats"
+              checked={features.disposableMats}
+              onChange={handleFeatureChange}
+            />
+            Disposable changing mats available
+          </CheckboxLabel>
+
+
+          <CheckboxLabel>
+            <input
+              type="checkbox"
+              name="diaperBags"
+              checked={features.diaperBags}
+            onChange={handleFeatureChange}
+          />
+            Diaper disposal bags available
           </CheckboxLabel>
 
           <CheckboxLabel>

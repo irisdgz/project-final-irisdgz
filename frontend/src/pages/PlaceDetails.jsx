@@ -104,10 +104,12 @@ export default function PlaceDetails() {
       <Section>
         <h2>Features</h2>
         <ul>
-          <li>Changing table: {place.features?.changingTable ? "Yes" : "No"}</li>
-          <li>Private room: {place.features?.privateRoom ? "Yes" : "No"}</li>
-          <li>Stroller access: {place.features?.strollerAccess ? "Yes" : "No"}</li>
-          <li>Accessible: {place.features?.accessible ? "Yes" : "No"}</li>
+          <li>Changing table available: {place.features?.changingTable ? "Yes" : "No"}</li>
+          <li>Baby lounge available: {place.features?.babyLounge ? "Yes" : "No"}</li>
+          <li>Stroller friendly: {place.features?.strollerAccess ? "Yes" : "No"}</li>
+          <li>Wheelchair accessible: {place.features?.accessible ? "Yes" : "No"}</li>
+          <li>Disposable changing mats available: {place.features?.disposableMats ? "Yes" : "No"}</li>
+          <li>Diaper disposal bags available: {place.features?.diaperBags ? "Yes" : "No"}</li>
           <li>Cleanliness: {place.features?.clean ? "Yes" : "No"}</li>
         </ul>
       </Section>
