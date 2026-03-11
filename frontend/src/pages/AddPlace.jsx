@@ -1,10 +1,25 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
 import { useAuthStore } from "../store/authStore";
 
 const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL || "http://localhost:8081";
+  import.meta.env.VITE_API_URL || "http://localhost:8081";
+
+function LocationPicker({ lat, lng, setLat, setLng }) {
+  useMapEvents({
+    click(event) {
+      const { lat, lng } = event.latlng;
+      setLat(lat.toFixed(6));
+      setLng(lng.toFixed(6));
+    },
+  });
+
+  if (!lat || !lng) return null;
+
+  return <Marker position={[Number(lat), Number(lng)]} />;
+}
 
 export default function AddPlace() {
   const navigate = useNavigate();
@@ -35,7 +50,7 @@ export default function AddPlace() {
     }
 
     if (isNaN(latNumber) || isNaN(lngNumber)) {
-      setError("Please enter valid numbers for latitude and longitude.");
+      setError("Please select a valid location on the map.");
       return;
     }
 
@@ -67,6 +82,8 @@ export default function AddPlace() {
       setError("Something went wrong. Please try again.");
     }
   };
+
+  const defaultCenter = lat && lng ? [Number(lat), Number(lng)] : [59.3293, 18.0686];
 
   return (
     <Wrapper>
@@ -105,6 +122,21 @@ export default function AddPlace() {
           </select>
         </label>
 
+        <MapSection>
+          <MapLabel>Pick location on map *</MapLabel>
+          <MapContainer
+            center={defaultCenter}
+            zoom={12}
+            style={{ height: "320px", width: "100%" }}
+          >
+            <TileLayer
+              attribution="© OpenStreetMap contributors"
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            />
+            <LocationPicker lat={lat} lng={lng} setLat={setLat} setLng={setLng} />
+          </MapContainer>
+        </MapSection>
+
         <Row>
           <label>
             Lat *
@@ -136,7 +168,7 @@ export default function AddPlace() {
 }
 
 const Wrapper = styled.main`
-  max-width: 600px;
+  max-width: 700px;
   margin: 0 auto;
   padding: 40px 16px;
 `;
@@ -165,6 +197,16 @@ const Form = styled.form`
     background: white;
     cursor: pointer;
   }
+`;
+
+const MapSection = styled.div`
+  display: grid;
+  gap: 8px;
+`;
+
+const MapLabel = styled.p`
+  margin: 0;
+  font-size: 14px;
 `;
 
 const Row = styled.div`
