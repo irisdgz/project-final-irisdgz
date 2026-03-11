@@ -35,7 +35,7 @@ export default function AddPlace() {
 
   const [features, setFeatures] = useState({
     changingTable: false,
-    privateRoom: false,
+    babyLounge: false,
     strollerAccess: false,
     accessible: false,
     disposableMats: false,
@@ -104,7 +104,8 @@ export default function AddPlace() {
     }
   };
 
-  const mapCenter = lat && lng ? [Number(lat), Number(lng)] : [59.3293, 18.0686];
+  const mapCenter =
+    lat && lng ? [Number(lat), Number(lng)] : [59.3293, 18.0686];
 
   return (
     <Wrapper>
@@ -155,7 +156,12 @@ export default function AddPlace() {
               attribution="© OpenStreetMap contributors"
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
-            <LocationPicker lat={lat} lng={lng} setLat={setLat} setLng={setLng} />
+            <LocationPicker
+              lat={lat}
+              lng={lng}
+              setLat={setLat}
+              setLng={setLng}
+            />
           </MapContainer>
         </MapSection>
 
@@ -182,77 +188,76 @@ export default function AddPlace() {
         </Row>
 
         <FeatureSection>
-          <h2>Features</h2>
+          <FeatureHeading>Features</FeatureHeading>
 
           <CheckboxLabel>
+            <span>Changing table available</span>
             <input
               type="checkbox"
               name="changingTable"
               checked={features.changingTable}
               onChange={handleFeatureChange}
             />
-            Changing table available
           </CheckboxLabel>
 
           <CheckboxLabel>
+            <span>Baby lounge available</span>
             <input
               type="checkbox"
               name="babyLounge"
               checked={features.babyLounge}
               onChange={handleFeatureChange}
             />
-            Baby lounge available
           </CheckboxLabel>
 
           <CheckboxLabel>
+            <span>Stroller friendly</span>
             <input
               type="checkbox"
               name="strollerAccess"
               checked={features.strollerAccess}
               onChange={handleFeatureChange}
             />
-            Stroller friendly
           </CheckboxLabel>
 
           <CheckboxLabel>
+            <span>Wheelchair accessible</span>
             <input
               type="checkbox"
               name="accessible"
               checked={features.accessible}
               onChange={handleFeatureChange}
             />
-            Accessible
           </CheckboxLabel>
-          
+
           <CheckboxLabel>
+            <span>Disposable changing mats available</span>
             <input
               type="checkbox"
               name="disposableMats"
               checked={features.disposableMats}
               onChange={handleFeatureChange}
             />
-            Disposable changing mats available
           </CheckboxLabel>
 
-
           <CheckboxLabel>
+            <span>Diaper disposal bags available</span>
             <input
               type="checkbox"
               name="diaperBags"
               checked={features.diaperBags}
-            onChange={handleFeatureChange}
-          />
-            Diaper disposal bags available
+              onChange={handleFeatureChange}
+            />
           </CheckboxLabel>
 
           <CheckboxLabel>
+            <span>Cleanliness</span>
             <input
               type="checkbox"
               name="clean"
               checked={features.clean}
               onChange={handleFeatureChange}
             />
-            Cleanliness
           </CheckboxLabel>
         </FeatureSection>
 
@@ -280,7 +285,7 @@ const Form = styled.form`
     font-size: 14px;
   }
 
-  input,
+  input[type="text"],
   select {
     padding: 8px 10px;
     border-radius: 8px;
@@ -323,10 +328,25 @@ const FeatureHeading = styled.h2`
 `;
 
 const CheckboxLabel = styled.label`
-  display: flex;
+  display: flex !important;
+  justify-content: space-between;
   align-items: center;
-  gap: 8px;
-  font-size: 14px;
+  width: 100%;
+  font-size: 15px;
+  cursor: pointer;
+  padding: 6px 0;
+
+  span {
+    flex: 1;
+  }
+
+  input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    margin: 0;
+    padding: 0;
+    flex-shrink: 0;
+  }
 `;
 
 const Error = styled.p`
