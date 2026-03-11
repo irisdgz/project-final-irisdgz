@@ -41,7 +41,7 @@ export const GlobalStyles = createGlobalStyle`
     color: var(--text);
     font-family: "Inter", ui-sans-serif, system-ui, -apple-system,
       Segoe UI, Roboto, Helvetica, Arial;
-    line-height: 1.5;
+    line-height: 1.6;
     letter-spacing: -0.01em;
     -webkit-font-smoothing: antialiased;
   }
@@ -62,6 +62,14 @@ export const GlobalStyles = createGlobalStyle`
     display: block;
   }
 
+  /* Forms inherit typography */
+  button,
+  input,
+  textarea,
+  select {
+    font: inherit;
+  }
+
   /* Focus (accessible + clean) */
   :focus-visible {
     outline: 3px solid rgba(17, 17, 17, 0.2);
@@ -69,23 +77,22 @@ export const GlobalStyles = createGlobalStyle`
     border-radius: 8px;
   }
 
-  /* Typography scale – editorial feel */
+  /* Typography */
   h1, h2, h3, h4 {
     margin: 0;
     letter-spacing: -0.03em;
   }
 
   h1 {
-    font-size: clamp(42px, 6vw, 84px);
+    font-size: clamp(32px, 4vw, 48px);
     font-weight: 600;
-    line-height: 1.03;
-    letter-spacing: -0.04em;
+    line-height: 1.1;
   }
 
   h2 {
-    font-size: clamp(24px, 3vw, 36px);
+    font-size: clamp(22px, 2.5vw, 32px);
     font-weight: 600;
-    line-height: 1.1;
+    line-height: 1.2;
   }
 
   h3 {
@@ -101,5 +108,10 @@ export const GlobalStyles = createGlobalStyle`
 
   .muted {
     color: var(--muted);
+  }
+
+  /* Consistent section spacing */
+  section {
+    margin-bottom: var(--s4);
   }
 `;

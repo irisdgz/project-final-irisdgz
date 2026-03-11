@@ -41,7 +41,7 @@ export default function Login() {
   return (
     <Page>
       <Card>
-        <h1>Log in</h1>
+        <LoginTitle>Log in</LoginTitle>
 
         <Form onSubmit={onSubmit}>
           <label>
@@ -86,12 +86,17 @@ const Page = styled.main`
   justify-content: center;
 `;
 
+const LoginTitle = styled.h1`
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 16px;
+`;
 const Card = styled.section`
   width: 100%;
   max-width: 420px;
   border: 1px solid #eee;
   border-radius: 16px;
-  padding: 16px;
+  padding: 24px;
 `;
 
 const Form = styled.form`

@@ -22,20 +22,22 @@ export default function Home() {
   return (
     <Wrapper>
       <Hero>
-        <h1>Find baby changing facilities near you</h1>
-        <p className="muted">
-          Discover clean, accessible and family-friendly places.
-        </p>
+        <Title>Find a baby changing spot nearby</Title>
+        <Subtitle>
+          Quickly find a clean and convenient place when your baby needs a change.
+        </Subtitle>
       </Hero>
 
-      <PlacesMap places={places} />
+      <MapWrapper>
+        <PlacesMap places={places} />
+      </MapWrapper>
 
       <Section>
-        {loading && <p>Loading places…</p>}
+        {loading && <StatusText>Loading places...</StatusText>}
         {error && <ErrorText>{error}</ErrorText>}
 
         {!loading && !error && places.length === 0 && (
-          <p>No places added yet.</p>
+          <StatusText>No places added yet.</StatusText>
         )}
 
         <Grid>
@@ -49,17 +51,55 @@ export default function Home() {
 }
 
 const Wrapper = styled.main`
-  padding: 24px 16px 40px;
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
+  padding: 40px 40px 56px;
+
+  @media (max-width: 768px) {
+    padding: 32px 20px 48px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 24px 14px 40px;
+  }
 `;
 
 const Hero = styled.section`
-  margin-bottom: 24px;
+  margin-bottom: 32px;
+`;
 
-  .muted {
-    color: #666;
+const Title = styled.h1`
+  margin: 0 0 10px;
+  font-size: 35px;
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.5px;
+  color: #111;
+
+  @media (max-width: 768px) {
+    font-size: 32px;
   }
+
+  @media (max-width: 480px) {
+    font-size: 26px;
+  }
+`;
+
+const Subtitle = styled.p`
+  margin: 0;
+  font-size: 18px;
+  color: #666;
+  max-width: 600px;
+
+  @media (max-width: 768px) {
+    font-size: 16px;
+  }
+`;
+
+const MapWrapper = styled.div`
+  margin-bottom: 32px;
+  border-radius: 16px;
+  overflow: hidden;
 `;
 
 const Section = styled.section`
@@ -71,9 +111,18 @@ const Grid = styled.div`
   display: grid;
   gap: 16px;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+
+  @media (max-width: 480px) {
+    grid-template-columns: 1fr;
+  }
+`;
+
+const StatusText = styled.p`
+  margin: 0;
+  color: #444;
 `;
 
 const ErrorText = styled.p`
-  color: red;
   margin: 0;
+  color: red;
 `;
