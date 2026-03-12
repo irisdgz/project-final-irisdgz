@@ -48,25 +48,42 @@ const Brand = styled(Link)`
 
 const Nav = styled.nav`
   display: flex;
-  gap: 12px;
+  gap: 18px;
   align-items: center;
 `;
 
 const NavItem = styled(NavLink)`
   text-decoration: none;
-  color: inherit;
+  color: var(--text);
+  font-size: 16px;
+  font-weight: 500;
+  padding: 4px 6px;
+  border-radius: 6px;
+
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: var(--muted);
+  }
 
   &.active {
-    font-weight: 600;
+    font-weight: 700;
   }
 `;
 
 const LogoutButton = styled.button`
   background: none;
   border: none;
-  padding: 0;
+  padding: 4px 6px;
   cursor: pointer;
 
-  font: inherit;
-  color: inherit;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--text);
+
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: var(--muted);
+  }
 `;

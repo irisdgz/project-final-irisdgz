@@ -42,7 +42,7 @@ export default function Signup() {
   return (
     <Page>
       <Card>
-        <h1>Sign up</h1>
+        <SignupTitle>Sign up</SignupTitle>
 
         <Form onSubmit={onSubmit}>
           <label>
@@ -83,18 +83,22 @@ export default function Signup() {
           <button type="submit">Create account</button>
         </Form>
 
-        <p>
+        <FooterText>
           Already have an account? <Link to="/login">Log in</Link>
-        </p>
+        </FooterText>
       </Card>
     </Page>
   );
 }
 
 const Page = styled.main`
-  padding: 24px 16px;
+  padding: 32px 16px;
   display: flex;
   justify-content: center;
+
+  @media (max-width: 480px) {
+    padding: 24px 14px;
+  }
 `;
 
 const Card = styled.section`
@@ -102,7 +106,17 @@ const Card = styled.section`
   max-width: 420px;
   border: 1px solid #eee;
   border-radius: 16px;
-  padding: 16px;
+  padding: 24px;
+`;
+
+const SignupTitle = styled.h1`
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 16px;
+
+  @media (max-width: 480px) {
+    font-size: 28px;
+  }
 `;
 
 const Form = styled.form`
@@ -128,6 +142,10 @@ const Form = styled.form`
     background: white;
     cursor: pointer;
   }
+`;
+
+const FooterText = styled.p`
+  margin-top: 16px;
 `;
 
 const Error = styled.p`

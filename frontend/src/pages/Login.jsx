@@ -73,7 +73,7 @@ export default function Login() {
         </Form>
 
         <p>
-          No account? <Link to="/signup">Sign up</Link>
+          No account yet? <Link to="/signup">Sign up here</Link>
         </p>
       </Card>
     </Page>
