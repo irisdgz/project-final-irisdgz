@@ -281,10 +281,13 @@ const Wrapper = styled.main`
 
 const Title = styled.h1`
   margin-bottom: 24px;
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1.1;
 
   @media (max-width: 600px) {
     margin-bottom: 20px;
-    font-size: 32px;
+    font-size: 28px;
   }
 `;
 
