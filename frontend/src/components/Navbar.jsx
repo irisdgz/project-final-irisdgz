@@ -27,9 +27,16 @@ const Header = styled.header`
   display: flex;
   align-items: center;
   justify-content: space-between;
-
   padding: 20px 40px;
   border-bottom: 1px solid #eee;
+
+  @media (max-width: 768px) {
+    padding: 18px 20px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 14px 12px;
+  }
 `;
 
 const Brand = styled(Link)`
@@ -40,16 +47,31 @@ const Brand = styled(Link)`
   letter-spacing: -1px;
   line-height: 1;
 
-   &:hover {
+  &:hover {
     text-decoration: none;
   }
-`;
 
+  @media (max-width: 768px) {
+    font-size: 40px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 28px;
+  }
+`;
 
 const Nav = styled.nav`
   display: flex;
   gap: 18px;
   align-items: center;
+
+  @media (max-width: 768px) {
+    gap: 12px;
+  }
+
+  @media (max-width: 480px) {
+    gap: 8px;
+  }
 `;
 
 const NavItem = styled(NavLink)`
@@ -59,7 +81,6 @@ const NavItem = styled(NavLink)`
   font-weight: 500;
   padding: 4px 6px;
   border-radius: 6px;
-
   transition: color 0.2s ease;
 
   &:hover {
@@ -69,6 +90,11 @@ const NavItem = styled(NavLink)`
   &.active {
     font-weight: 700;
   }
+
+  @media (max-width: 480px) {
+    font-size: 14px;
+    padding: 2px 4px;
+  }
 `;
 
 const LogoutButton = styled.button`
@@ -76,14 +102,17 @@ const LogoutButton = styled.button`
   border: none;
   padding: 4px 6px;
   cursor: pointer;
-
   font-size: 16px;
   font-weight: 500;
   color: var(--text);
-
   transition: color 0.2s ease;
 
   &:hover {
     color: var(--muted);
+  }
+
+  @media (max-width: 480px) {
+    font-size: 14px;
+    padding: 2px 4px;
   }
 `;

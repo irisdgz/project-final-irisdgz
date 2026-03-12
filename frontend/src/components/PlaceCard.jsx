@@ -32,11 +32,11 @@ export default function PlaceCard({ place }) {
       <Features>
         {features.changingTable && <Feature>Changing table</Feature>}
         {features.babyLounge && <Feature>Baby lounge</Feature>}
-        {features.strollerAccess && <Feature>Stroller access</Feature>}
-        {features.accessible && <Feature>Accessible</Feature>}
-        {features.disposableMats && <Feature>Disposable Mats</Feature>}
-        {features.diaperBags && <Feature>Diaper Bags</Feature>}
-        {features.clean && <Feature>Clean</Feature>}
+        {features.strollerAccess && <Feature>Stroller friendly</Feature>}
+        {features.accessible && <Feature>Wheelchair access</Feature>}
+        {features.disposableMats && <Feature>Disposable mats</Feature>}
+        {features.diaperBags && <Feature>Diaper bags</Feature>}
+        {features.clean && <Feature>Very clean</Feature>}
       </Features>
     </Card>
   );
