@@ -22,9 +22,9 @@ export default function Home() {
   return (
     <Wrapper>
       <Hero>
-        <Title>Find a baby changing spot nearby</Title>
+        <Title>Time for a MiniStop?</Title>
         <Subtitle>
-          Quickly find a clean and convenient place when your baby needs a change.
+          Find a clean changing spot, quick and easy.
         </Subtitle>
       </Hero>
 
@@ -70,8 +70,8 @@ const Hero = styled.section`
 
 const Title = styled.h1`
   margin: 0 0 10px;
-  font-size: 35px;
-  font-weight: 800;
+  font-size: 30px;
+  font-weight: 600;
   line-height: 1.15;
   letter-spacing: -0.5px;
   color: #111;
