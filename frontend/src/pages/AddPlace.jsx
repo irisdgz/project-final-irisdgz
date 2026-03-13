@@ -6,7 +6,9 @@ import { useAuthStore } from "../store/authStore";
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8081";
 
-function LocationPicker({ lat, lng, setLat, setLng }) {
+function LocationPicker({ lat, lng, setLat, setLng }) { /*demoT his component listens for map clicks using Leaflet.
+When the user clicks the map, it captures the latitude and longitude and saves them in state.
+Then a marker appears on the map showing the selected location.*/
   useMapEvents({
     click(event) {
       const clickedLat = event.latlng.lat;
@@ -19,7 +21,7 @@ function LocationPicker({ lat, lng, setLat, setLng }) {
 
   if (!lat || !lng) return null;
 
-  return <Marker position={[Number(lat), Number(lng)]} />;
+  return <Marker position={[Number(lat), Number(lng)]} />; /*demo*/
 }
 
 export default function AddPlace() {
@@ -75,7 +77,7 @@ export default function AddPlace() {
     }
 
     try {
-      const response = await fetch(`${API_BASE_URL}/places`, {
+      const response = await fetch(`${API_BASE_URL}/places`, { /*demo*/
         method: "POST",
         headers: {
           "Content-Type": "application/json",

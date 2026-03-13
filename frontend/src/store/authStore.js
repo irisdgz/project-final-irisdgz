@@ -3,7 +3,9 @@ import { create } from "zustand";
 const TOKEN_KEY = "ministops_accessToken";
 const USER_KEY = "ministops_user";
 
-export const useAuthStore = create((set) => ({
+export const useAuthStore = create((set) => ({ /*demo I use Zustand for global state management.
+I used it to store the authentication state, like the user’s access token and whether the user is logged in.
+This makes it easy for different components to access the same auth data.*/
   accessToken: localStorage.getItem(TOKEN_KEY),
   user: JSON.parse(localStorage.getItem(USER_KEY) || "null"),
   isLoggedIn: !!localStorage.getItem(TOKEN_KEY),

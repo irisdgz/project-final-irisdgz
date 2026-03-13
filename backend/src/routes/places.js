@@ -4,7 +4,7 @@ import { authenticateUser } from "../middleware/auth.js";
 
 const router = express.Router();
 
-// GET all places
+// GET all places DEMO
 router.get("/", async (req, res, next) => {
   try {
     const places = await Place.find().sort({ createdAt: -1 });
@@ -12,7 +12,9 @@ router.get("/", async (req, res, next) => {
   } catch (err) {
     next(err);
   }
-});
+}); /* This endpoint returns all baby changing places from the database.
+      It uses MongoDB with Mongoose to fetch the data.
+      The places are sorted by newest first, and then returned as JSON to the frontend.*/
 
 // GET one place
 router.get("/:id", async (req, res, next) => {
@@ -30,7 +32,8 @@ router.get("/:id", async (req, res, next) => {
 });
 
 // POST add place (protected) - accepts lat/lng
-router.post("/", authenticateUser, async (req, res, next) => {
+router.post("/", authenticateUser, async (req, res, next) => { /*demo This endpoint allows users to add a new place.
+It is protected with authenticateUser middleware, which means the user must be logged in.*/
   try {
     const { name, category, address, city, lat, lng, features } = req.body;
 
@@ -65,8 +68,7 @@ router.post("/", authenticateUser, async (req, res, next) => {
       address,
       city,
       features: features || {},
-      location: { type: "Point", coordinates: [lngNum, latNum] }, // Mongo wants [lng, lat]
-      createdBy: req.user.userId,
+      location: { type: "Point", coordinates: [lngNum, latNum] }, 
     });
 
     res.status(201).json({ success: true, place: newPlace });

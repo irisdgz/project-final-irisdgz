@@ -12,7 +12,9 @@ export const App = () => {
     <BrowserRouter>
       <Navbar />
 
-      <Routes>
+      <Routes> // Demo For navigation, I used React Router to define different routes in the app.
+                 This also connects to my protected route logic, because some pages should 
+                 only be visible to logged-in users.
         <Route
           path="/"
           element={
