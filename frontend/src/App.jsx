@@ -14,7 +14,9 @@ export const App = () => {
 
       <Routes> // Demo For navigation, I used React Router to define different routes in the app.
                  This also connects to my protected route logic, because some pages should 
-                 only be visible to logged-in users.
+                 only be visible to logged-in users.and it allows users to move between pages 
+                 without reloading the app.
+
         <Route
           path="/"
           element={

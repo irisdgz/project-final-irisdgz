@@ -6,9 +6,10 @@ import { useAuthStore } from "../store/authStore";
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8081";
 
-function LocationPicker({ lat, lng, setLat, setLng }) { /*demoT his component listens for map clicks using Leaflet.
-When the user clicks the map, it captures the latitude and longitude and saves them in state.
-Then a marker appears on the map showing the selected location.*/
+function LocationPicker({ lat, lng, setLat, setLng }) { /*demoWhen the user clicks the map, the useMapEvents hook captures the coordinates.
+These coordinates are saved in React state, and a marker appears on the map.
+When the form is submitted, the frontend sends the place data and coordinates to the backend API.
+The backend then stores the place in MongoDB.*/
   useMapEvents({
     click(event) {
       const clickedLat = event.latlng.lat;
