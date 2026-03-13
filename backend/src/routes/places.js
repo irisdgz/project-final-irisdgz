@@ -32,8 +32,10 @@ router.get("/:id", async (req, res, next) => {
 });
 
 // POST add place (protected) - accepts lat/lng
-router.post("/", authenticateUser, async (req, res, next) => { /*demo This endpoint allows users to add a new place.
-It is protected with authenticateUser middleware, which means the user must be logged in.*/
+router.post("/", authenticateUser, async (req, res, next) => { /*demo 
+This endpoint allows users to add a new place.
+Authentication middleware checks the user, which means the user must be logged in.
+after that, the place is saved in the database.*/
   try {
     const { name, category, address, city, lat, lng, features } = req.body;
 
