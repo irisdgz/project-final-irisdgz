@@ -1,4 +1,4 @@
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:8081";
+const API_BASE_URL = import.meta.env.VITE_API_URL;
 
 export async function getReviews(placeId) {
   const res = await fetch(`${API_BASE_URL}/places/${placeId}/reviews`);
