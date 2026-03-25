@@ -4,9 +4,9 @@ import styled from "styled-components";
 import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
 import { useAuthStore } from "../store/authStore";
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8081";
+const API_BASE_URL = import.meta.env.VITE_API_URL;
 
-function LocationPicker({ lat, lng, setLat, setLng }) { 
+function LocationPicker({ lat, lng, setLat, setLng }) {
   useMapEvents({
     click(event) {
       const clickedLat = event.latlng.lat;
@@ -19,7 +19,7 @@ function LocationPicker({ lat, lng, setLat, setLng }) {
 
   if (!lat || !lng) return null;
 
-  return <Marker position={[Number(lat), Number(lng)]} />; /*demo*/
+  return <Marker position={[Number(lat), Number(lng)]} />;
 }
 
 export default function AddPlace() {
@@ -75,7 +75,7 @@ export default function AddPlace() {
     }
 
     try {
-      const response = await fetch(`${API_BASE_URL}/places`, { /*demo*/
+      const response = await fetch(`${API_BASE_URL}/places`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -99,7 +99,7 @@ export default function AddPlace() {
       }
 
       navigate("/");
-    } catch (error) {
+    } catch {
       setError("Something went wrong. Please try again.");
     }
   };
