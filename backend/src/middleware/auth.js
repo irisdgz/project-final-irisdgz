@@ -20,7 +20,7 @@ export const authenticateUser = (req, res, next) => {
     }
 
     const payload = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = payload; // { userId, email, iat, exp }
+    req.user = payload; 
 
     next();
   } catch (err) {

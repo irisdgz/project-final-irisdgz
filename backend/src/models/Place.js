@@ -14,7 +14,7 @@ const placeSchema = new mongoose.Schema(
 
     city: { type: String, required: true, trim: true },
 
-    // GeoJSON Point (Mongo stores [lng, lat])
+    
     location: {
       type: {
         type: String,

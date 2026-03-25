@@ -7,6 +7,6 @@ const router = express.Router();
 
 router.use("/auth", authRoutes);
 router.use("/places", placesRoutes);
-router.use("/", reviewsRoutes); // reviews are nested like /places/:id/reviews
+router.use("/", reviewsRoutes); 
 
 export default router;

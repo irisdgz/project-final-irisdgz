@@ -10,7 +10,7 @@ const reviewSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// One review per user and per place
+
 reviewSchema.index({ placeId: 1, userId: 1 }, { unique: true });
 
 export const Review = mongoose.model("Review", reviewSchema);

@@ -12,11 +12,7 @@ router.get("/", async (req, res, next) => {
   } catch (err) {
     next(err);
   }
-}); /* This endpoint returns all baby changing places from the database.
-      It uses MongoDB with Mongoose to fetch the data.
-      The places are sorted by newest first, and then returned as JSON to the frontend.*/
-
-// GET one place
+}); 
 router.get("/:id", async (req, res, next) => {
   try {
     const place = await Place.findById(req.params.id);
@@ -31,11 +27,8 @@ router.get("/:id", async (req, res, next) => {
   }
 });
 
-// POST add place (protected) - accepts lat/lng
-router.post("/", authenticateUser, async (req, res, next) => { /*demo 
-This endpoint allows users to add a new place.
-Authentication middleware checks the user, which means the user must be logged in.
-after that, the place is saved in the database.*/
+
+router.post("/", authenticateUser, async (req, res, next) => { 
   try {
     const { name, category, address, city, lat, lng, features } = req.body;
 

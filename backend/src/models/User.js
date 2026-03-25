@@ -8,7 +8,7 @@ const userSchema = new mongoose.Schema(
       unique: true,
       lowercase: true,
       trim: true,
-      match: /.+\@.+\..+/, // simple email format check
+      match: /.+\@.+\..+/, 
     },
 
     username: {
@@ -25,7 +25,6 @@ const userSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// Optional: ensure index is actually created
 userSchema.index({ email: 1 }, { unique: true });
 
 export const User = mongoose.model("User", userSchema);
