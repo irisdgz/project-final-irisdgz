@@ -11,14 +11,13 @@ export const App = () => {
   return (
     <BrowserRouter>
       <Navbar />
-
-    <Routes>
-      <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
-      <Route path="/places/:id" element={<ProtectedRoute><PlaceDetails /></ProtectedRoute>} />
-      <Route path="/add-place" element={<ProtectedRoute><AddPlace /></ProtectedRoute>} />
-      <Route path="/login" element={<Login />} />
-  <   Route path="/signup" element={<Signup />} />
-</Routes>
+      <Routes>
+        <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
+        <Route path="/places/:id" element={<ProtectedRoute><PlaceDetails /></ProtectedRoute>} />
+        <Route path="/add-place" element={<ProtectedRoute><AddPlace /></ProtectedRoute>} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+      </Routes>
     </BrowserRouter>
   );
 };
