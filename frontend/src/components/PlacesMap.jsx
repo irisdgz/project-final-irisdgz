@@ -3,27 +3,27 @@ import { Link } from "react-router-dom";
 
 export default function PlacesMap({ places }) {
   const defaultCenter = [59.3293, 18.0686];
-
   return (
     <MapContainer
       center={defaultCenter}
       zoom={11}
       style={{ height: "400px", width: "100%" }}
+      aria-label="Map of baby changing places"
     >
       <TileLayer
         attribution="© OpenStreetMap contributors"
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-
       {places.map((place) => {
         const coordinates = place.location?.coordinates;
-
         if (!coordinates || coordinates.length < 2) return null;
-
         const [lng, lat] = coordinates;
-
         return (
-          <Marker key={place._id} position={[lat, lng]}>
+          <Marker
+            key={place._id}
+            position={[lat, lng]}
+            alt={`${place.name} in ${place.city}`}
+          >
             <Popup>
               <strong>{place.name}</strong>
               <br />

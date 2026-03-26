@@ -2,32 +2,22 @@ import { createGlobalStyle } from "styled-components";
 
 export const GlobalStyles = createGlobalStyle`
   :root {
-    /* Core colors */
     --bg: #fafafa;
     --text: #111111;
     --muted: #666666;
     --border: #e7e7e7;
     --surface: #ffffff;
-
-    /* Radius */
     --radius: 16px;
-
-    /* Spacing scale */
     --s1: 6px;
     --s2: 10px;
     --s3: 16px;
     --s4: 24px;
     --s5: 40px;
     --s6: 64px;
-
-    /* Layout */
     --max: 1120px;
   }
 
-  /* Reset */
-  *,
-  *::before,
-  *::after {
+  *, *::before, *::after {
     box-sizing: border-box;
   }
 
@@ -46,38 +36,29 @@ export const GlobalStyles = createGlobalStyle`
     -webkit-font-smoothing: antialiased;
   }
 
-  /* Links */
   a {
     color: inherit;
     text-decoration: none;
   }
-
   a:hover {
     text-decoration: underline;
   }
 
-  /* Images */
   img {
     max-width: 100%;
     display: block;
   }
 
-  /* Forms inherit typography */
-  button,
-  input,
-  textarea,
-  select {
+  button, input, textarea, select {
     font: inherit;
   }
 
-  /* Focus (accessible + clean) */
   :focus-visible {
     outline: 3px solid rgba(17, 17, 17, 0.2);
     outline-offset: 2px;
     border-radius: 8px;
   }
 
-  /* Typography */
   h1, h2, h3, h4 {
     margin: 0;
     letter-spacing: -0.03em;
@@ -110,8 +91,23 @@ export const GlobalStyles = createGlobalStyle`
     color: var(--muted);
   }
 
-  /* Consistent section spacing */
   section {
     margin-bottom: var(--s4);
+  }
+
+  /* Button contrast fix for Lighthouse accessibility */
+  button[type="submit"],
+  button[type="button"]:not(.logout) {
+    background: #111111;
+    color: #ffffff;
+    border: none;
+    cursor: pointer;
+    border-radius: 10px;
+    padding: 10px 12px;
+  }
+
+  button[type="submit"]:hover,
+  button[type="button"]:not(.logout):hover {
+    background: #333333;
   }
 `;
