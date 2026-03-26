@@ -5,7 +5,7 @@ import { User } from "../models/User.js";
 
 const router = express.Router();
 
-rrouter.post("/signup", async (req, res, next) => {
+router.post("/signup", async (req, res, next) => {
   try {
     const { email, password, username } = req.body;
     const normalizedEmail = email?.toLowerCase().trim();
@@ -60,3 +60,40 @@ rrouter.post("/signup", async (req, res, next) => {
     next(err);
   }
 });
+
+router.post("/login", async (req, res, next) => {
+  try {
+    const { email, password } = req.body;
+    const user = await User.findOne({ email: email?.toLowerCase() });
+
+    if (!user) {
+      return res.status(401).json({ success: false, message: "Invalid credentials" });
+    }
+
+    const ok = await bcrypt.compare(password, user.passwordHash);
+
+    if (!ok) {
+      return res.status(401).json({ success: false, message: "Invalid credentials" });
+    }
+
+    const accessToken = jwt.sign(
+      { userId: user._id, email: user.email },
+      process.env.JWT_SECRET,
+      { expiresIn: "7d" }
+    );
+
+    res.json({
+      success: true,
+      accessToken,
+      user: {
+        userId: user._id,
+        email: user.email,
+        username: user.username || "",
+      },
+    });
+  } catch (err) {
+    next(err);
+  }
+});
+
+export default router;
